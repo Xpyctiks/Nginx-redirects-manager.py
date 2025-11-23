@@ -74,12 +74,12 @@ def applyChanges() -> None:
             logging.info(f"-----------------------Applying changes in Nginx finished-----------------")
         result2 = subprocess.run(["sudo","git","add","."], capture_output=True, text=True)
         if result2.returncode == 0:
-            logging.info("Git add command successfull")
+            logging.info(f"Git add command successfull: {result2.stdout}")
             current_datetime = datetime.now()
             formatted_datetime = current_datetime.strftime("%d.%m.%Y %H:%M:%S")
             result2 = subprocess.run(["sudo","git","commit","-m", f"{formatted_datetime} by {current_user.realname}"], capture_output=True, text=True)
             if result2.returncode == 0:
-                logging.info("Git commit command successfull")
+                logging.info(f"Git commit command successfull: {result2.stdout}")
             else:
                 logging.error("Git commit failed!")
                 asyncio.run(send_to_telegram(f"Git commit error!",f"🚒Nginx Redirects Manager:"))
