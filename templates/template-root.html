@@ -54,11 +54,13 @@
         </li>
         <span class="spinner-border text-warning" role="status" id="spinnerLoading" style="margin-left: 5px; margin-top: 5px; visibility: hidden;"></span>
       </ul>
-      <form class="d-flex" action="/" method="POST">
+      <form class="d-flex" action="/action" method="POST">
       <span class="input-group-text" id="totalLines" style="color: #ffc107; background-color: #000000;">Поточний комміт в Git: {{ current_commit|safe }}</span>&nbsp;&nbsp;
       <button type="submit" class="btn btn-warning" name="rollback" id="rollbackButton" onClick="return confirm('Відкатити всі зміни назад? Всі зміни, що були зроблені але не застосовані, будут втрачені!')">Відкатити зміни</button>&nbsp;&nbsp;
-      <button type="submit" class="{{ applyButton|safe }}" name="commit" id="commitButton" onClick="return confirm('Зберігти та застосувати на сервері всі нові зміни?')" {{ applyButtonDisabled|safe }}>Застосувати зміни</button>&nbsp;&nbsp;
+      <button type="submit" class="{{ applyButton|safe }}" name="applyChanges" value="applyChanges" id="commitButton" onClick="return confirm('Зберігти та застосувати на сервері всі нові зміни?')" {{ applyButtonDisabled|safe }}>Застосувати зміни</button>&nbsp;&nbsp;
         <button class="btn btn-danger" type="submit" id="logoutButton" name="logout">{{ current_user.realname }}&nbsp;Вихід</button>
+      <input type="hidden" name="sitename" value="{{ current_domain|safe }}">
+      <input type="hidden" name="redir_type" value="{{ redirect_type|safe }}">
       </form>
     </div>
   </div>
@@ -100,6 +102,30 @@
   </table>
 </div>
 </form>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+  <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="myModalLabel">Інформація:</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+        </div>
+        <div class="modal-body">
+          <ul class=flashes style="margin-top: 33px;" id="message">
+            {% for category, message in messages %}
+            <li class="{{ category }}">{{ message }}</li>
+            {% endfor %}
+          </ul>
+        </div>    
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" autofocus>Got it</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+  {% endwith %}
   <script>
     const checkboxes = document.querySelectorAll('.chk');
     let lastChecked = null;

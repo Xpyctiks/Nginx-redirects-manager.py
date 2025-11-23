@@ -1,7 +1,8 @@
 import logging,os,subprocess,asyncio,re
-from flask import current_app,flash,redirect
+from flask import current_app,flash
 from functions.send_to_telegram import send_to_telegram
 from flask_login import current_user
+from datetime import datetime
 
 def del_redirect(location: str,currDomain: str,redir_type: str) -> None:
     """Redirect-manager page: deletes one redirect,selected by Delete button on it.Don't applies changes immediately. Requires redirect "from location" and "sitename" as a parameter"""
@@ -61,7 +62,7 @@ def del_selected_redirects(array: str,currDomain: str, redir_type: str) -> None:
             logging.info("Marker file for Apply button created")
     logging.info(f"-----------------------Selected bulk redirects deleted---------------------------")
 
-def applyChanges(currDomain: str,redir_type: str) -> None:
+def applyChanges() -> None:
     """Redirect-manager page: applies all changes, made to redirect config files"""
     logging.info(f"-----------------------Applying changes in Nginx by {current_user.realname}-----------------")
     result1 = subprocess.run(["sudo","nginx","-t"], capture_output=True, text=True)
@@ -71,8 +72,22 @@ def applyChanges(currDomain: str,redir_type: str) -> None:
             logging.info(f"Nginx reloaded successfully. Result: {result2.stderr.strip()}")
             flash(f"Нові зміни успішно протестовано та застосовано на сервері!.",'alert alert-success')
             logging.info(f"-----------------------Applying changes in Nginx finished-----------------")
-            if os.path.exists("/tmp/ngx_redirects.marker"):
-                os.unlink("/tmp/ngx_redirects.marker")
+        result2 = subprocess.run(["sudo","git","add","."], capture_output=True, text=True)
+        if result2.returncode == 0:
+            logging.info("Git add command successfull")
+            current_datetime = datetime.now()
+            formatted_datetime = current_datetime.strftime("%d.%m.%Y %H:%M:%S")
+            result2 = subprocess.run(["sudo","git","commit","-m", f"{formatted_datetime} by {current_user.realname}"], capture_output=True, text=True)
+            if result2.returncode == 0:
+                logging.info("Git commit command successfull")
+            else:
+                logging.error("Git commit failed!")
+                asyncio.run(send_to_telegram(f"Git commit error!",f"🚒Nginx Redirects Manager:"))
+        else:
+            logging.error("Git add failed!")
+            asyncio.run(send_to_telegram(f"Git add error!",f"🚒Nginx Redirects Manager:"))
+        if os.path.exists("/tmp/ngx_redirects.marker"):
+            os.unlink("/tmp/ngx_redirects.marker")
     else:
         logging.error(f"Error reloading Nginx: {result1.stderr.strip()}")
         asyncio.run(send_to_telegram(f"Changes apply error: Nginx has bad configuration",f"🚒Nginx Redirects Manager Error:"))
