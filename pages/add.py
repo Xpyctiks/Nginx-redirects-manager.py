@@ -68,8 +68,8 @@ rewrite ^(.*)$ https://{currDomain}{redirTo} permanent;
             with open(file301, "a", encoding="utf-8") as f:
                 f.write(template)
             #here we create a marker file which makes "Apply changes" button to glow yellow
-            if not os.path.exists("/tmp/currDomain.marker"):
-                with open("/tmp/currDomain.marker", 'w',encoding='utf8') as file3:
+            if not os.path.exists("/tmp/ngx_redirects.marker"):
+                with open("/tmp/ngx_redirects.marker", 'w',encoding='utf8') as file3:
                     file3.write("")
                 logging.info("Marker file for Apply button created")
             logging.info(f"-----------------------New redirect added successfully for {currDomain}-----------------")

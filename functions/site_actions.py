@@ -81,16 +81,33 @@ def applyChanges() -> None:
             result2 = subprocess.run(["sudo","git","commit","-m", f"{formatted_datetime} by {current_user.realname}"], capture_output=True, text=True)
             if result2.returncode == 0:
                 logging.info(f"Git commit command successfull: {result2.stdout}")
+                if os.path.exists("/tmp/ngx_redirects.marker"):
+                    os.unlink("/tmp/ngx_redirects.marker")
+                logging.info(f"-----------------------Applying changes in Nginx finished-----------------")
             else:
                 logging.error("Git commit failed!")
-                asyncio.run(send_to_telegram(f"Git commit error!",f"🚒Nginx Redirects Manager:"))
+                asyncio.run(send_to_telegram(f"{current_user.realname}: Git commit error!",f"🚒Nginx Redirects Manager:"))
+                logging.info(f"-----------------------Applying changes in Nginx finished-----------------")
         else:
             logging.error("Git add failed!")
             asyncio.run(send_to_telegram(f"Git add error!",f"🚒Nginx Redirects Manager:"))
-        if os.path.exists("/tmp/ngx_redirects.marker"):
-            os.unlink("/tmp/ngx_redirects.marker")
+            logging.info(f"-----------------------Applying changes in Nginx finished-----------------")
     else:
         logging.error(f"Error reloading Nginx: {result1.stderr.strip()}")
         asyncio.run(send_to_telegram(f"Changes apply error: Nginx has bad configuration",f"🚒Nginx Redirects Manager Error:"))
         flash(f"Помилка перевірки конфігурації!\n{result1.stderr.strip()}",'alert alert-danger')
         logging.info(f"-----------------------Applying changes in Nginx finished-----------------")
+
+def rollBack() -> None:
+    """Redirect-manager page: rollback all changes to the last Git commit"""
+    logging.info(f"-----------------------Rolling back changes by {current_user.realname}-----------------")
+    os.chdir(os.path.join(current_app.config['NGX_FOLDER'],current_app.config['NGX_ADD_CONF_DIR']))
+    result1 = subprocess.run(["sudo","git","restore","."], capture_output=True, text=True)
+    if result1.returncode == 0:
+        logging.info(f"--------------------Rollback command successfull!----------------------------------")
+        flash(f"Всі зміни повернені на останній комміт!.",'alert alert-success')
+        if os.path.exists("/tmp/ngx_redirects.marker"):
+            os.unlink("/tmp/ngx_redirects.marker")
+    else:
+        logging.error(f"---------------------Git rollback failed!----------------------------------------")
+        asyncio.run(send_to_telegram(f"{current_user.realname}: Git rollback error!",f"🚒Nginx Redirects Manager:"))

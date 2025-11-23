@@ -1,6 +1,6 @@
 from flask import redirect,Blueprint,request
 from flask_login import login_required
-from functions.site_actions import del_redirect, del_selected_redirects, applyChanges
+from functions.site_actions import del_redirect, del_selected_redirects, applyChanges, rollBack
 
 action_bp = Blueprint("action", __name__)
 @action_bp.route("/action", methods=['POST'])
@@ -14,8 +14,10 @@ def do_action():
         del_redirect(request.form['del_redir'].strip(),request.form['sitename'].strip(),request.form['redir_type'].strip())
         return redirect(f"/?domain={request.form['sitename'].strip()}&type={request.form['redir_type'].strip()}",301)
     elif (request.form.get('applyChanges')):
-        print("apply!")
         applyChanges()
+        return redirect(f"/?domain={request.form['sitename'].strip()}&type={request.form['redir_type'].strip()}",301)
+    elif (request.form.get('rollback')):
+        rollBack()
         return redirect(f"/?domain={request.form['sitename'].strip()}&type={request.form['redir_type'].strip()}",301)
     else:
         return redirect("/",301)

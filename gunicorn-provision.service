@@ -5,7 +5,7 @@ After=network.target
 [Service]
 User=root
 Group=root
-WorkingDirectory=/share/provision
+WorkingDirectory=/opt/provision
 Environment="PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 ExecStart=/usr/bin/gunicorn -c /share/provision/gunicorn_config.py main:application
 StandardOutput=append:/var/log/gunicorn/provision.log
