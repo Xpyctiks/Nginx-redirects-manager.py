@@ -15,6 +15,7 @@ def root():
         args = request.args
         currDomain = args.get('domain')
         type = args.get('type')
+        addButtonDisabled = "disabled"
         #First of all parsing content of NGX_ADD_CONF_DIR for files - format <redirect_type>-<domain>.conf. For example, 301-site.com.conf
         configs = os.path.join(current_app.config['NGX_FOLDER'],current_app.config['NGX_ADD_CONF_DIR'])
         pattern = re.compile(r"^(\d+)-(.+)\.conf$")
@@ -69,6 +70,7 @@ def root():
                 html_redirect_types = "".join(f'<li><a class="dropdown-item" href="?domain={currDomain}&type={t}">{t}</a></li>' for t in redirectsList)
             i = 1
             currFile=os.path.join(current_app.config['NGX_FOLDER'],current_app.config['NGX_ADD_CONF_DIR'],type+"-"+currDomain+".conf")
+            addButtonDisabled = ""
             with open(currFile, "r", encoding="utf-8") as f:
                 content = f.read()
             #check if the config file has any records
@@ -112,7 +114,4 @@ def root():
             applyButton = "btn btn-outline-warning"
             applyButtonDisabled = "disabled"
         return render_template("template-root.html",table=table,current_domain=currDomain,redirect_type=type,redirectsList=html_redirect_types,domainsList=html_domains,applyButton=applyButton,
-                               total_lines=total_lines,total_redirects=total_redirects,current_commit=current_commit,applyButtonDisabled=applyButtonDisabled)
-    #If get POST actions
-    if request.method == 'GET':
-        pass
+                               total_lines=total_lines,total_redirects=total_redirects,current_commit=current_commit,applyButtonDisabled=applyButtonDisabled,addButtonDisabled=addButtonDisabled)

@@ -42,8 +42,10 @@
           </div>
         </li>
         <li class="nav-item" style="margin-left: 5px;">
-          <form class="d-flex" action="/" method="POST">
-            <button type="submit" class="btn btn-info" name="addnew" id="addnew" value="addnew">Додати нові редиректи</button>
+          <form method="GET" action="/add">
+            <button class="btn btn-info" value="add" {{ addButtonDisabled|safe }}>Додати нові редиректи</button>
+            <input type="hidden" name="domain" value="{{ current_domain|safe }}">
+            <input type="hidden" name="type" value="{{ redirect_type|safe }}">
           </form>
         </li>
         <li class="nav-item">
