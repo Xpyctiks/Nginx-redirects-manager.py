@@ -6,7 +6,6 @@ action_bp = Blueprint("action", __name__)
 @action_bp.route("/action", methods=['POST'])
 @login_required
 def do_action():
-    print(request.get_data())
     if (request.form.get('selected')):
         array = request.form.getlist("selected")
         del_selected_redirects(array,request.form['sitename'].strip(),request.form['redir_type'].strip())

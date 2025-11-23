@@ -71,7 +71,8 @@ def applyChanges() -> None:
         if  re.search(r".*started.*",result2.stderr):
             logging.info(f"Nginx reloaded successfully. Result: {result2.stderr.strip()}")
             flash(f"Нові зміни успішно протестовано та застосовано на сервері!.",'alert alert-success')
-            logging.info(f"-----------------------Applying changes in Nginx finished-----------------")
+        os.chdir(os.path.join(current_app.config['NGX_FOLDER'],current_app.config['NGX_ADD_CONF_DIR']))
+        #start of parsing array() and remove selected routes
         result2 = subprocess.run(["sudo","git","add","."], capture_output=True, text=True)
         if result2.returncode == 0:
             logging.info(f"Git add command successfull: {result2.stdout}")
