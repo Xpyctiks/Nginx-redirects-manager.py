@@ -58,13 +58,13 @@
       <span class="input-group-text" id="totalLines" style="color: #ffc107; background-color: #000000;">Поточний комміт в Git: {{ current_commit|safe }}</span>&nbsp;&nbsp;
       <button type="submit" class="btn btn-warning" name="rollback" id="rollbackButton" onClick="return confirm('Відкатити всі зміни назад? Всі зміни, що були зроблені але не застосовані, будут втрачені!')">Відкатити зміни</button>&nbsp;&nbsp;
       <button type="submit" class="{{ applyButton|safe }}" name="commit" id="commitButton" onClick="return confirm('Зберігти та застосувати на сервері всі нові зміни?')" {{ applyButtonDisabled|safe }}>Застосувати зміни</button>&nbsp;&nbsp;
-        <button class="btn btn-outline-warning" type="submit" id="logoutButton" name="logout">{{ current_user.realname }}&nbsp;Вихід</button>
+        <button class="btn btn-danger" type="submit" id="logoutButton" name="logout">{{ current_user.realname }}&nbsp;Вихід</button>
       </form>
     </div>
   </div>
 </nav>
 </div>
-<form action="/" method="POST">
+<form action="/action" method="POST">
   <div>
   <table class="table table-striped" style="margin-top: 60px; width: 100vw;">
     <thead class="table table-warning">

@@ -3,8 +3,8 @@ from flask_login import current_user, login_required
 import logging,os
 from werkzeug.utils import secure_filename
 
-uploadredir_bp = Blueprint("upload_redirects", __name__)
-@uploadredir_bp.route("/upload_redirects", methods=['GET','POST'])
+upload_bp = Blueprint("upload", __name__)
+@upload_bp.route("/upload", methods=['GET','POST'])
 @login_required
 def uploadredir_file():
     if request.method == 'POST':

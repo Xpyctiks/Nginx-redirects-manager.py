@@ -1,26 +1,12 @@
 from flask import render_template,Blueprint
 from flask_login import login_required
-from flask import render_template,request,redirect,flash,Blueprint,current_app
-from functions.site_actions import enable_allredirects, disable_allredirects
+from flask import render_template,request,Blueprint,current_app
 import re,os
 
 root_bp = Blueprint("root", __name__)
-@root_bp.route("/", methods=['GET'])
+@root_bp.route("/", methods=['GET','POST'])
 @login_required
 def root():
-    if request.method == 'POST':
-        if not request.form.get('manager') and request.form.get('redirect_checkbox'):
-            #parsing list of "redirect_checkbox" values because there can be 2 at the same time
-            values = request.form.getlist("redirect_checkbox")
-            checkbox_enabled = "1" in values
-            if checkbox_enabled:
-                enable_allredirects(request.form.get("sitename").strip())
-                return redirect("/",301)
-            else:
-                disable_allredirects(request.form.get("sitename").strip())
-                return redirect("/",301)
-        else:
-            return redirect("/",301)
     #if this is GET request - show page
     if request.method == 'GET':
         table = currDomain = type = ""
@@ -106,7 +92,8 @@ def root():
                     <td class="table-success">{typ}</td>
                     <td class="table-success">
                         <button class="btn btn-danger" type="submit" name="del_redir" value="{match.group("path")}">Видалити</button>
-                        <input type="hidden" name="sitename" value="{domain}">
+                        <input type="hidden" name="sitename" value="{currDomain}">
+                        <input type="hidden" name="redir_type" value="{type}">
                     </td>
                     <td class="table-success">{line_number}</td>
                     \n</tr>"""
@@ -118,7 +105,7 @@ def root():
                     for line in f:
                         total_lines = total_lines+1
         #here we check file marker to make Apply button glow yellow if there is something to apply
-        if os.path.exists("/tmp/provision.marker"):
+        if os.path.exists("/tmp/ngx_redirects.marker"):
             applyButton = "btn btn-success"
             applyButtonDisabled = ""
         else:
@@ -126,3 +113,6 @@ def root():
             applyButtonDisabled = "disabled"
         return render_template("template-root.html",table=table,current_domain=currDomain,redirect_type=type,redirectsList=html_redirect_types,domainsList=html_domains,applyButton=applyButton,
                                total_lines=total_lines,total_redirects=total_redirects,current_commit=current_commit,applyButtonDisabled=applyButtonDisabled)
+    #If get POST actions
+    if request.method == 'GET':
+        pass

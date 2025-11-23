@@ -42,7 +42,6 @@ application.register_blueprint(routes_blueprint)
 
 def main() -> None:
     load_config(application)
-    #logging.info(f"-----------------------Starting pre-check(JOB ID:). Total {JOB_TOTAL} archive(s) found-----------------")
     application.run("0.0.0.0",80,debug=True)
 
 if __name__ == "__main__":
