@@ -31,7 +31,6 @@ login_manager.session_protection = "strong"
 login_manager.init_app(application)
 with application.app_context():
     db.create_all()
-from functions.send_to_telegram import send_to_telegram
 from functions.cli_management import set_telegramChat,set_telegramToken,set_logpath,delete_user,register_user,update_user,set_ngxFolder,set_ngxAddConfDir,show_users
 
 @login_manager.user_loader
@@ -42,7 +41,6 @@ application.register_blueprint(routes_blueprint)
 
 def main() -> None:
     load_config(application)
-    application.run("0.0.0.0",80,debug=True)
 
 if __name__ == "__main__":
     application.app_context().push()
@@ -116,7 +114,7 @@ if __name__ == "__main__":
 \tAdd Telegram ChatID for notifications.
 {sys.argv[0]} set token <Token>
 \tAdd Telegram Token for notifications.
-{sys.argv[0]} set logpath <new log file path>
+{sys.argv[0]} set log <new log file path>
 \tAdd Telegram Token for notifications.
 {sys.argv[0]} user add <login> <password> <realname>
 \tAdd new user with its password and default permissions for all cache pathes.
