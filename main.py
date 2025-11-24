@@ -82,16 +82,16 @@ if __name__ == "__main__":
                 delete_user(sys.argv[3].strip())
             else:
                 print("Error! Enter both username and new password")
-        elif sys.argv[1] == "set" and sys.argv[2] == "webFolder":
+        elif sys.argv[1] == "set" and sys.argv[2] == "ngx-folder":
             if (len(sys.argv) == 4):
                 set_ngxFolder(sys.argv[3].strip())
             else:
-                print("Error! Enter root path to webfolder")
-        elif sys.argv[1] == "set" and sys.argv[2] == "nginxCrtPath":
+                print("Error! Enter root folder for Nginx. /etc/nginx for example.")
+        elif sys.argv[1] == "set" and sys.argv[2] == "ngx-add-conf":
             if (len(sys.argv) == 4):
                 set_ngxAddConfDir(sys.argv[3].strip())
             else:
-                print("Error! Enter path to Nginx SSL certificates folder")
+                print("Error! Enter path to the folder with additional nginx files with redirects")
         elif sys.argv[1] == "show" and sys.argv[2] == "config":
             if (len(sys.argv) == 3):
                 print (f"""
@@ -122,12 +122,10 @@ if __name__ == "__main__":
 \tSet new password for existing user.
 {sys.argv[0]} user del <user>
 \tDelete existing user by its login
-{sys.argv[0]} cfaccount add <name> <token>
-\tAdd new CF account and its token
-{sys.argv[0]} cfaccount import <path to file>
-\tImport CF account records from file
-{sys.argv[0]} cfaccount del <name>
-\tDelete CF account entry\n
+{sys.argv[0]} set ngx-folder <nginx_root_folder>
+\tSets root folder for Nginx. /etc/nginx for example.
+{sys.argv[0]} set ngx-add-conf <path to nginx additional settings folder>
+\tSets path to the folder with additional nginx files with redirects
 Info: full script should be launched via UWSGI server. In CLI mode use can only use commands above.
 """)
 
