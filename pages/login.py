@@ -1,5 +1,5 @@
 from flask import render_template,request,redirect,flash,Blueprint,session,make_response
-import logging,asyncio
+import logging
 from flask_login import login_user, current_user
 from db.database import User
 from functions.send_to_telegram import send_to_telegram
@@ -25,7 +25,7 @@ def do_login():
     return response
   else:
     logging.error(f"Login: Wrong password \"{password}\" for user \"{username}\", IP:{request.remote_addr}")
-    asyncio.run(send_to_telegram("🚷Provision:",f"Login error.Wrong password for user \"{username}\", IP:{request.remote_addr}"))
+    send_to_telegram(f"Login error.Wrong password for user {username}, IP:{request.remote_addr}","🚷Nginx-redirects-manager:",)
     flash('Wrong username or password!', 'alert alert-danger')
     return render_template("template-login.html")
  
