@@ -52,12 +52,12 @@
         <p class="card-text"><h3>Додати один редірект прям ось тут:</h3></p>
         <p class="card-text" style="margin-top: -10px;">Редірект "3відки" повинен починатись та закінчуватись слешем(/).</p>
         <div class="input-group mb-3 " style="margin-top: -10px;">
-          <span class="input-group-text" id="RedirectFromField">Редірект з: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{sitename|safe}}</span>
+          <span class="input-group-text" id="RedirectFromField">Звідки: {{ current_domain|safe }}</span>
           <input type="text" class="form-control" placeholder="/page/subpage/oldpage/" name="RedirectFromField">
         </div>
         <p class="card-text" style="margin-top: -10px;">Редірект "Куди" повинен починатись та закінчуватись слешем(/).</p>
         <div class="input-group mb-3" style="margin-top: -10px;">
-          <span class="input-group-text" id="RedirectToField" >Редірект куди: {{sitename|safe}}</span>
+          <span class="input-group-text" id="RedirectToField" >Куди:</span>
           <input type="text" class="form-control" placeholder="/page/newpage/" name="RedirectToField">
         </div>
         <p class="card-text" style="color: chocolate;">Якщо був обран файл, то цей файл і буде завантажений.Текстові поля вище будут ігноруватися.<br>Якщо файл не обран,то дані із текстових полів вище будуть завантажені.</p>
@@ -66,7 +66,7 @@
           <span class="badge rounded-pill bg-info text-dark">Оберіть тип редіректу:</span>
             <select class="form-select form-select-sm" name="templateField">
               <option value="strict">= Точний (точна вказана сторінка,ніякі інші)</option>
-              <option value="catch all">~ Всі схожі (редірект всього,що починається з заданої строки і далі не важливо що)</option>
+              <option value="catch_all">~ Всі схожі (редірект всього,що починається з заданої строки і далі не важливо що)</option>
             </select>
         </div>
         <input type="hidden" name="domain" value="{{ current_domain|safe }}">
@@ -102,6 +102,13 @@
       function showLoading() {
         document.getElementById("spinner").style.visibility = "visible";
       }
+      document.addEventListener("DOMContentLoaded", function () {
+        const modalElement = document.getElementById("myModal");
+        if (modalElement) {
+          const modal = new bootstrap.Modal(modalElement);
+          modal.show();
+        }
+      });
     </script>
 </body>
 </html>
