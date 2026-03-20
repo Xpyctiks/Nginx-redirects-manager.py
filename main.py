@@ -26,7 +26,7 @@ generate_default_config(application,CONFIG_DIR,DB_FILE)
 load_config(application)
 application.secret_key = application.config["SECRET_KEY"]
 login_manager = LoginManager()
-login_manager.login_view = "main.login.login"
+login_manager.login_view = "main.login.do_login"
 login_manager.session_protection = "strong"
 login_manager.init_app(application)
 with application.app_context():
@@ -105,26 +105,26 @@ if __name__ == "__main__":
               """)
     elif sys.argv[1] == "show" and sys.argv[2] == "users":
       show_users()
-#if we call the script from console with argument "main" to start provision process
-elif len(sys.argv) == 2 and sys.argv[1] == "main":
-    main()
-#else just show help info.
-elif len(sys.argv) <= 2:
-  print(f"""Usage: \n{sys.argv[0]} set chat <chatID>
-\tAdd Telegram ChatID for notifications.
-{sys.argv[0]} set token <Token>
-\tAdd Telegram Token for notifications.
-{sys.argv[0]} set log <new log file path>
-\tAdd Telegram Token for notifications.
-{sys.argv[0]} user add <login> <password> <realname>
-\tAdd new user with its password and default permissions for all cache pathes.
-{sys.argv[0]} user setpwd <user> <new password>
-\tSet new password for existing user.
-{sys.argv[0]} user del <user>
-\tDelete existing user by its login
-{sys.argv[0]} set ngx-folder <nginx_root_folder>
-\tSets root folder for Nginx. /etc/nginx for example.
-{sys.argv[0]} set ngx-add-conf <path to nginx additional settings folder>
-\tSets path to the folder with additional nginx files with redirects
-Info: full script should be launched via UWSGI server. In CLI mode use can only use commands above.
-""")
+  #if we call the script from console with argument "main" to start provision process
+  elif len(sys.argv) == 2 and sys.argv[1] == "main":
+      main()
+  #else just show help info.
+  elif len(sys.argv) <= 2:
+    print(f"""Usage: \n{sys.argv[0]} set chat <chatID>
+  \tAdd Telegram ChatID for notifications.
+  {sys.argv[0]} set token <Token>
+  \tAdd Telegram Token for notifications.
+  {sys.argv[0]} set log <new log file path>
+  \tAdd Telegram Token for notifications.
+  {sys.argv[0]} user add <login> <password> <realname>
+  \tAdd new user with its password and default permissions for all cache pathes.
+  {sys.argv[0]} user setpwd <user> <new password>
+  \tSet new password for existing user.
+  {sys.argv[0]} user del <user>
+  \tDelete existing user by its login
+  {sys.argv[0]} set ngx-folder <nginx_root_folder>
+  \tSets root folder for Nginx. /etc/nginx for example.
+  {sys.argv[0]} set ngx-add-conf <path to nginx additional settings folder>
+  \tSets path to the folder with additional nginx files with redirects
+  Info: full script should be launched via UWSGI server. In CLI mode use can only use commands above.
+  """)
