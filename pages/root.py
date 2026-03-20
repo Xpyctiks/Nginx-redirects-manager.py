@@ -76,13 +76,13 @@ def root():
       table +="""<tr class="alert alert-info" role="info"><td colspan="7">В цьому файлі ще нема редіректів...</td></tr>"""
       total_lines = total_redirects = "0"
     else:
-      pattern = re.compile(r'location\s+(?P<typ>.)\s+(?P<path>/[^\s{]+)\s*{[^}]*?rewrite\s+\^\(\.\*\)\$\s+(?P<target>https?://[^\s]+)\s+permanent;',re.MULTILINE | re.DOTALL)
+      pattern = re.compile(r'location\s*(?P<type>.)\s*(?P<path>/[^\s{]+)\s*{[^}]*?return\s+(?P<type2>301)\s+(?P<target>https?://[^\s;]+);',re.DOTALL)
       for match in pattern.finditer(content):
         start_index = match.start()
         line_number = content.count('\n', 0, start_index) + 1
-        if (match.group("typ")) == "=":
+        if (match.group("type")) == "=":
           typ = "Точна одна сторінка (=)"
-        elif (match.group("typ")) == "~":
+        elif (match.group("type")) == "~":
           typ = "Захват усього (~)"
         table += f"""\n<tr>\n
         <th scope="row" class="table-success">{i}</th>

@@ -39,19 +39,19 @@ def uploadredir_file():
         redirFrom, redirTo = line.strip().split(",")
         if re.match("https:",redirTo):
           template = f"""location {typeRedir} {redirFrom} {{
-rewrite ^(.*)$ {redirTo} permanent;
+  return 301 {redirTo};
 }}
 """
         else:
           template = f"""location {typeRedir} {redirFrom} {{
-rewrite ^(.*)$ https://{currDomain}{redirTo} permanent;
+  return 301 https://{currDomain}{redirTo};
 }}
 """            
         totalData += template
         redirectsCount = redirectsCount + 1
     #now write down all redirects to the file
     with open(file301, "a", encoding="utf-8") as f:
-        f.write(totalData)
+      f.write(totalData)
     logging.info(f"New redirects were saved to {file301}")
     os.unlink(filename)
     logging.info(f"Uploaded CSV file {filename} was deleted")
@@ -80,17 +80,17 @@ rewrite ^(.*)$ https://{currDomain}{redirTo} permanent;
     if re.match("https:",redirectTo):
       logging.info(f"uploadredir_file(): Redirect filed To: contains full FQDN address")
       template = f"""location {typeRedir} {redirectFrom} {{
-rewrite ^(.*)$ {redirectTo} permanent;
+  return 301 {redirectTo};
 }}
 """
     else:
       logging.info(f"uploadredir_file(): Redirect filed To: contains relative path for the source domain")
       template = f"""location {typeRedir} {redirectFrom.strip()} {{
-rewrite ^(.*)$ https://{currDomain}{redirectTo} permanent;
+  return 301 https://{currDomain}{redirectTo};
 }}
 """        
     with open(file301, "a", encoding="utf-8") as f:
-        f.write(template)
+      f.write(template)
     #here we create a marker file which makes "Apply changes" button to glow yellow
     if not os.path.exists("/tmp/ngx_redirects.marker"):
       with open("/tmp/ngx_redirects.marker", 'w',encoding='utf8') as file3:
