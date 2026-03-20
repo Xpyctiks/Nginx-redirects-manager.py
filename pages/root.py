@@ -80,7 +80,8 @@ def root():
       table +="""<tr class="alert alert-info" role="info"><td colspan="7">В цьому файлі ще нема редіректів...</td></tr>"""
       total_lines = total_redirects = "0"
     else:
-      pattern = re.compile(r'location\s*(?P<type>.)\s*(?P<path>/[^\s{]+)\s*{[^}]*?return\s+(?P<type2>301)\s+(?P<target>https?://[^\s;]+);',re.DOTALL)
+      pattern = re.compile(r'location\s(?P<type>.*?)\s(?P<path>\/[^\s{]+)\s*{[^}]*?return\s(?P<type2>...)(?:\s+(?P<target>[^;]+))?;',re.DOTALL)
+      #pattern = re.compile(r'location\s*(?P<type>.)\s*(?P<path>/[^\s{]+)\s*{[^}]*?return\s+(?P<type2>301)\s+(?P<target>https?://[^\s;]+);',re.DOTALL)
       for match in pattern.finditer(content):
         start_index = match.start()
         line_number = content.count('\n', 0, start_index) + 1
@@ -88,6 +89,8 @@ def root():
           typ = "Точна одна сторінка (=)"
         elif (match.group("type")) == "~":
           typ = "Захват усього (~)"
+        else:
+          typ = match.group("type")
         table += f"""\n<tr>\n
         <th scope="row" class="table-success">{i}</th>
         <td class="table-success">{match.group("path")}</td>

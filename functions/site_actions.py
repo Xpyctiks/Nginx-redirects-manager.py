@@ -1,4 +1,4 @@
-import logging,os,subprocess,asyncio,re
+import logging,os,subprocess,re
 from flask import current_app,flash
 from functions.send_to_telegram import send_to_telegram
 from flask_login import current_user
@@ -24,7 +24,7 @@ def del_redirect(location: str,currDomain: str,redir_type: str) -> None:
       logging.info(f"Redirect path {location} of {currDomain} was deleted successfully")
   except Exception as msg:
       logging.error(f"Global Error:", "{msg}")
-      asyncio.run(send_to_telegram(f"Global Error: {msg}",f"🚒Nginx Redirects Manager, Global Error:"))
+      send_to_telegram(f"Global Error: {msg}",f"🚒Nginx Redirects Manager, Global Error:")
   #here we create a marker file which makes "Apply changes" button to glow yellow
   if not os.path.exists("/tmp/ngx_redirects.marker"):
     with open("/tmp/ngx_redirects.marker", 'w',encoding='utf8') as file3:
@@ -54,7 +54,7 @@ def del_selected_redirects(array: str,currDomain: str, redir_type: str) -> None:
         logging.info(f"Redirect path {location} of {currDomain} was deleted successfully")
   except Exception as msg:
       logging.error(f"Global Error:", "{msg}")
-      asyncio.run(send_to_telegram(f"Global Error: {msg}",f"🚒Nginx Redirects Manager, Global Error:"))
+      send_to_telegram(f"Global Error: {msg}",f"🚒Nginx Redirects Manager, Global Error:")
   #here we create a marker file which makes "Apply changes" button to glow yellow
   if not os.path.exists("/tmp/ngx_redirects.marker"):
     with open("/tmp/ngx_redirects.marker", 'w',encoding='utf8') as file3:
@@ -86,15 +86,15 @@ def applyChanges() -> None:
         logging.info(f"-----------------------Applying changes in Nginx finished-----------------")
       else:
         logging.error("Git commit failed!")
-        asyncio.run(send_to_telegram(f"{current_user.realname}: Git commit error!",f"🚒Nginx Redirects Manager:"))
+        send_to_telegram(f"{current_user.realname}: Git commit error!",f"🚒Nginx Redirects Manager:")
         logging.info(f"-----------------------Applying changes in Nginx finished-----------------")
     else:
       logging.error("Git add failed!")
-      asyncio.run(send_to_telegram(f"Git add error!",f"🚒Nginx Redirects Manager:"))
+      send_to_telegram(f"Git add error!",f"🚒Nginx Redirects Manager:")
       logging.info(f"-----------------------Applying changes in Nginx finished-----------------")
   else:
     logging.error(f"Error reloading Nginx: {result1.stderr.strip()}")
-    asyncio.run(send_to_telegram(f"Changes apply error: Nginx has bad configuration",f"🚒Nginx Redirects Manager Error:"))
+    send_to_telegram(f"Changes apply error: Nginx has bad configuration",f"🚒Nginx Redirects Manager Error:")
     flash(f"Помилка перевірки конфігурації!\n{result1.stderr.strip()}",'alert alert-danger')
     logging.info(f"-----------------------Applying changes in Nginx finished-----------------")
 
@@ -110,4 +110,4 @@ def rollBack() -> None:
       os.unlink("/tmp/ngx_redirects.marker")
   else:
     logging.error(f"---------------------Git rollback failed!----------------------------------------")
-    asyncio.run(send_to_telegram(f"{current_user.realname}: Git rollback error!",f"🚒Nginx Redirects Manager:"))
+    send_to_telegram(f"{current_user.realname}: Git rollback error!",f"🚒Nginx Redirects Manager:")
