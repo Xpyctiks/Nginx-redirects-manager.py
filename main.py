@@ -41,7 +41,6 @@ application.register_blueprint(routes_blueprint)
 
 def main() -> None:
   load_config(application)
-  application.run("192.168.10.150",80,debug=True)
 
 if __name__ == "__main__":
   application.app_context().push()

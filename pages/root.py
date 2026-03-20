@@ -1,7 +1,7 @@
 from flask import render_template,Blueprint
 from flask_login import login_required
-from flask import render_template,request,Blueprint,current_app
-import re,os
+from flask import render_template,request,Blueprint,current_app,redirect,flash
+import re,os,logging
 
 root_bp = Blueprint("root", __name__)
 @root_bp.route("/", methods=['GET'])
@@ -69,6 +69,10 @@ def root():
     i = 1
     currFile = os.path.join(current_app.config['NGX_FOLDER'],current_app.config['NGX_ADD_CONF_DIR'],type+"-"+currDomain+".conf")
     addButtonDisabled = ""
+    if not os.path.exists(currFile):
+      logging.error(f"Trying to access file which doesn't exists: {currFile}")
+      flash(f"Звернення до файлу {currFile} який не існує!", 'alert alert-danger')
+      return redirect("/")
     with open(currFile, "r", encoding="utf-8") as f:
       content = f.read()
     #check if the config file has any records
