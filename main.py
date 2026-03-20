@@ -30,88 +30,87 @@ login_manager.login_view = "main.login.login"
 login_manager.session_protection = "strong"
 login_manager.init_app(application)
 with application.app_context():
-    db.create_all()
+  db.create_all()
 from functions.cli_management import set_telegramChat,set_telegramToken,set_logpath,delete_user,register_user,update_user,set_ngxFolder,set_ngxAddConfDir,show_users
 
 @login_manager.user_loader
 def load_user(user_id):
-    return db.session.get(User,int(user_id))
+  return db.session.get(User,int(user_id))
 from pages import blueprint as routes_blueprint
 application.register_blueprint(routes_blueprint)
 
 def main() -> None:
-    load_config(application)
-    application.run("192.168.10.150",80,debug=True)
+  load_config(application)
 
 if __name__ == "__main__":
-    application.app_context().push()
-    if len(sys.argv) > 2:
-        if sys.argv[1] == "set" and sys.argv[2] == "chat":
-            if (len(sys.argv) == 4):
-                set_telegramChat(sys.argv[3].strip())
-            else:
-                print("Error! Enter ChatID")
-        elif sys.argv[1] == "set" and sys.argv[2] == "token":
-            if (len(sys.argv) == 4):
-                set_telegramToken(sys.argv[3].strip())
-            else:
-                print("Error! Enter Token")
-        elif sys.argv[1] == "set" and sys.argv[2] == "log":
-            if (len(sys.argv) == 4):
-                set_logpath(sys.argv[3].strip())
-            else:
-                print("Error! Enter log path")
-        elif sys.argv[1] == "user" and sys.argv[2] == "add":
-            #if no "role" specified
-            if (len(sys.argv) == 6):
-                register_user(sys.argv[3].strip(),sys.argv[4].strip(),sys.argv[5].strip())
-            #if "role" is specified
-            elif (len(sys.argv) == 7):
-                if not sys.argv[6].strip().isdigit():
-                    print("Role can be only a digit.")
-                    quit()
-                register_user(sys.argv[3].strip(),sys.argv[4].strip(),sys.argv[5].strip(),sys.argv[6].strip())
-            else:
-                print("Error! Reqired: username/password/realname, role can be set too. ")
-        elif sys.argv[1] == "user" and sys.argv[2] == "setpwd":
-            if (len(sys.argv) == 5):
-                update_user(sys.argv[3].strip(),sys.argv[4].strip())
-            else:
-                print("Error! Enter both username and new password")
-        elif sys.argv[1] == "user" and sys.argv[2] == "del":
-            if (len(sys.argv) == 4):
-                delete_user(sys.argv[3].strip())
-            else:
-                print("Error! Enter both username and new password")
-        elif sys.argv[1] == "set" and sys.argv[2] == "ngx-folder":
-            if (len(sys.argv) == 4):
-                set_ngxFolder(sys.argv[3].strip())
-            else:
-                print("Error! Enter root folder for Nginx. /etc/nginx for example.")
-        elif sys.argv[1] == "set" and sys.argv[2] == "ngx-add-conf":
-            if (len(sys.argv) == 4):
-                set_ngxAddConfDir(sys.argv[3].strip())
-            else:
-                print("Error! Enter path to the folder with additional nginx files with redirects")
-        elif sys.argv[1] == "show" and sys.argv[2] == "config":
-            if (len(sys.argv) == 3):
-                print (f"""
-    Telegram ChatID:       {application.config["TELEGRAM_TOKEN"]}
-    Telegram Token:        {application.config["TELEGRAM_CHATID"]}
-    Log file:              {application.config["LOG_FILE"]}
-    SessionKey:            {application.config["SECRET_KEY"]}
-    Nginx folder:          {application.config["NGX_FOLDER"]}
-    Nginx add. config dir: {application.config["NGX_ADD_CONF_DIR"]}
-    Session secret key:    {application.secret_key}
-                """)
-        elif sys.argv[1] == "show" and sys.argv[2] == "users":
-            show_users()
-    #if we call the script from console with argument "main" to start provision process
-    elif len(sys.argv) == 2 and sys.argv[1] == "main":
-        main()
-    #else just show help info.
-    elif len(sys.argv) <= 2:
-        print(f"""Usage: \n{sys.argv[0]} set chat <chatID>
+  application.app_context().push()
+  if len(sys.argv) > 2:
+    if sys.argv[1] == "set" and sys.argv[2] == "chat":
+      if (len(sys.argv) == 4):
+        set_telegramChat(sys.argv[3].strip())
+      else:
+        print("Error! Enter ChatID")
+    elif sys.argv[1] == "set" and sys.argv[2] == "token":
+      if (len(sys.argv) == 4):
+        set_telegramToken(sys.argv[3].strip())
+      else:
+        print("Error! Enter Token")
+    elif sys.argv[1] == "set" and sys.argv[2] == "log":
+      if (len(sys.argv) == 4):
+        set_logpath(sys.argv[3].strip())
+      else:
+        print("Error! Enter log path")
+    elif sys.argv[1] == "user" and sys.argv[2] == "add":
+      #if no "role" specified
+      if (len(sys.argv) == 6):
+          register_user(sys.argv[3].strip(),sys.argv[4].strip(),sys.argv[5].strip())
+      #if "role" is specified
+      elif (len(sys.argv) == 7):
+        if not sys.argv[6].strip().isdigit():
+          print("Role can be only a digit.")
+          quit()
+        register_user(sys.argv[3].strip(),sys.argv[4].strip(),sys.argv[5].strip(),sys.argv[6].strip())
+      else:
+        print("Error! Reqired: username/password/realname, role can be set too. ")
+    elif sys.argv[1] == "user" and sys.argv[2] == "setpwd":
+      if (len(sys.argv) == 5):
+        update_user(sys.argv[3].strip(),sys.argv[4].strip())
+      else:
+        print("Error! Enter both username and new password")
+    elif sys.argv[1] == "user" and sys.argv[2] == "del":
+      if (len(sys.argv) == 4):
+        delete_user(sys.argv[3].strip())
+      else:
+        print("Error! Enter both username and new password")
+    elif sys.argv[1] == "set" and sys.argv[2] == "ngx-folder":
+      if (len(sys.argv) == 4):
+        set_ngxFolder(sys.argv[3].strip())
+      else:
+        print("Error! Enter root folder for Nginx. /etc/nginx for example.")
+    elif sys.argv[1] == "set" and sys.argv[2] == "ngx-add-conf":
+      if (len(sys.argv) == 4):
+        set_ngxAddConfDir(sys.argv[3].strip())
+      else:
+        print("Error! Enter path to the folder with additional nginx files with redirects")
+    elif sys.argv[1] == "show" and sys.argv[2] == "config":
+      if (len(sys.argv) == 3):
+        print (f"""
+  Telegram ChatID:       {application.config["TELEGRAM_TOKEN"]}
+  Telegram Token:        {application.config["TELEGRAM_CHATID"]}
+  Log file:              {application.config["LOG_FILE"]}
+  SessionKey:            {application.config["SECRET_KEY"]}
+  Nginx folder:          {application.config["NGX_FOLDER"]}
+  Nginx add. config dir: {application.config["NGX_ADD_CONF_DIR"]}
+  Session secret key:    {application.secret_key}
+              """)
+    elif sys.argv[1] == "show" and sys.argv[2] == "users":
+      show_users()
+#if we call the script from console with argument "main" to start provision process
+elif len(sys.argv) == 2 and sys.argv[1] == "main":
+    main()
+#else just show help info.
+elif len(sys.argv) <= 2:
+  print(f"""Usage: \n{sys.argv[0]} set chat <chatID>
 \tAdd Telegram ChatID for notifications.
 {sys.argv[0]} set token <Token>
 \tAdd Telegram Token for notifications.
@@ -129,4 +128,3 @@ if __name__ == "__main__":
 \tSets path to the folder with additional nginx files with redirects
 Info: full script should be launched via UWSGI server. In CLI mode use can only use commands above.
 """)
-
