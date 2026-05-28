@@ -1,7 +1,9 @@
 from flask import render_template,Blueprint
 from flask_login import login_required
 from flask import render_template,request,Blueprint,current_app,redirect,flash
-import re,os,logging
+import re
+import os
+import logging
 
 root_bp = Blueprint("root", __name__)
 @root_bp.route("/", methods=['GET'])
@@ -80,7 +82,7 @@ def root():
       table +="""<tr class="alert alert-info" role="info"><td colspan="7">В цьому файлі ще нема редіректів...</td></tr>"""
       total_lines = total_redirects = "0"
     else:
-      pattern = re.compile(r'location\s(?P<type>.*?)\s(?P<path>\/[^\s{]+)\s*{[^}]*?return\s(?P<type2>...)(?:\s+(?P<target>[^;]+))?;',re.DOTALL)
+      pattern = re.compile(r'location\s+(?P<type>\S+)\s+(?P<path>(?:https?://[^\s{]+|\/[^\s{]+))\s*{[^}]*?return\s(?P<type2>...)(?:\s+(?P<target>[^;]+))?;',re.DOTALL)
       #pattern = re.compile(r'location\s*(?P<type>.)\s*(?P<path>/[^\s{]+)\s*{[^}]*?return\s+(?P<type2>301)\s+(?P<target>https?://[^\s;]+);',re.DOTALL)
       for match in pattern.finditer(content):
         start_index = match.start()

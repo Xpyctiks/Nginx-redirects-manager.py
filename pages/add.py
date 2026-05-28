@@ -1,7 +1,9 @@
 from flask import render_template,request,redirect,flash,Blueprint,current_app
 from flask_login import current_user, login_required
-import logging,os,re
 from werkzeug.utils import secure_filename
+import logging
+import os
+import re
 
 add_bp = Blueprint("add", __name__)
 @add_bp.route("/add", methods=['POST'])

@@ -2,9 +2,11 @@
 
 from flask import Flask
 from flask_login import LoginManager
-import os,sys
+import os
+import sys
 from datetime import timedelta
 
+VERSION = "1.5.1"
 CONFIG_DIR = "/etc/nginx-redirects-manager/"
 DB_FILE = os.path.join(CONFIG_DIR,"nginx-redirects-manager.db")
 JOB_COUNTER = JOB_TOTAL = 1
@@ -108,6 +110,9 @@ if __name__ == "__main__":
   #if we call the script from console with argument "main" to start provision process
   elif len(sys.argv) == 2 and sys.argv[1] == "main":
       main()
+  elif len(sys.argv) == 2 and (sys.argv[1] == "-v" or sys.argv[1] == "version"):
+      print(VERSION)
+      quit(0)
   #else just show help info.
   elif len(sys.argv) <= 2:
     print(f"""Usage: \n{sys.argv[0]} set chat <chatID>
