@@ -1,6 +1,7 @@
 from flask import render_template,Blueprint
 from flask_login import login_required
 from flask import render_template,request,Blueprint,current_app,redirect,flash
+from functions.site_actions import is_admin
 import re
 import os
 import logging
@@ -120,4 +121,4 @@ def root():
   else:
     applyButton = "btn btn-outline-warning"
     applyButtonDisabled = "disabled"
-  return render_template("template-root.html",table=table,current_domain=currDomain,redirect_type=type,redirectsList=html_redirect_types,domainsList=html_domains,applyButton=applyButton,total_lines=total_lines,total_redirects=total_redirects,current_commit=current_commit,applyButtonDisabled=applyButtonDisabled,addButtonDisabled=addButtonDisabled)
+  return render_template("template-root.html",table=table,current_domain=currDomain,redirect_type=type,redirectsList=html_redirect_types,domainsList=html_domains,applyButton=applyButton,total_lines=total_lines,total_redirects=total_redirects,current_commit=current_commit,applyButtonDisabled=applyButtonDisabled,addButtonDisabled=addButtonDisabled,admin_panel=is_admin())

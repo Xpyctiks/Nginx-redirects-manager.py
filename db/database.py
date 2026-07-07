@@ -7,8 +7,8 @@ class User(UserMixin, db.Model):
   id = db.Column(db.Integer, primary_key=True)
   username = db.Column(db.String(80), unique=True, nullable=False)
   realname = db.Column(db.String(80), nullable=False)
-  password_hash = db.Column(db.String(120), nullable=False)
-  role = db.Column(db.String(120), nullable=False,default="0")
+  password_hash = db.Column(db.String(255), nullable=False)
+  rights = db.Column(db.Integer, nullable=False, default=1)
   created = db.Column(db.DateTime,default=datetime.now)
   def check_password(self, password):
     return check_password_hash(self.password_hash, password)
@@ -21,6 +21,7 @@ class Settings(db.Model):
   sessionKey = db.Column(db.String(64), nullable=False)
   nginxFolder = db.Column(db.String(64), nullable=False)
   nginxAddConfigsFolder = db.Column(db.String(100), nullable=False)
+  autheliaLogoutUrl = db.Column(db.String(512), nullable=True, default="")
 
 class Domains(db.Model):
   id = db.Column(db.Integer, primary_key=True)

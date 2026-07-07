@@ -101,6 +101,12 @@ def applyChanges() -> None:
     flash(f"Помилка перевірки конфігурації!\n{result1.stderr.strip()}",'alert alert-danger')
     logging.info(f"-----------------------Applying changes in Nginx finished-----------------")
 
+def is_admin() -> str:
+  """Returns a navbar link to the admin panel if the current user has admin rights, otherwise an empty string"""
+  if current_user.is_authenticated and current_user.rights == 255:
+    return '<li class="nav-item"><a class="nav-link active" href="/admin_panel">🎮Адмін-панель</a></li>'
+  return ""
+
 def rollBack() -> None:
   """Redirect-manager page: rollback all changes to the last Git commit"""
   logging.info(f"-----------------------Rolling back changes by {current_user.realname}-----------------")

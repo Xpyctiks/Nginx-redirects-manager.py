@@ -17,6 +17,7 @@ def load_config(application):
         "SECRET_KEY": f"{config.sessionKey}",
         "NGX_FOLDER": f"{config.nginxFolder}",
         "NGX_ADD_CONF_DIR": f"{config.nginxAddConfigsFolder}",
+        "AUTHELIA_LOGOUT_URL": f"{config.autheliaLogoutUrl or ''}",
       })
       logging.basicConfig(filename=config.logFile,level=logging.INFO,format='%(asctime)s - Ngx_Redir_Manager - %(levelname)s - %(message)s',datefmt='%d-%m-%Y %H:%M:%S')
       logging.getLogger('werkzeug').setLevel(logging.WARNING)
@@ -32,13 +33,14 @@ def generate_default_config(application,CONFIG_DIR: str,DB_FILE: str):
       length = 32
       characters = string.ascii_letters + string.digits
       session_key = ''.join(random.choice(characters) for _ in range(length))
-      default_settings = Settings(id=1, 
+      default_settings = Settings(id=1,
         telegramChat = "",
         telegramToken = "",
         logFile = "/var/log/nginx-redirects-manager.log",
         sessionKey = session_key,
         nginxFolder = "/etc/nginx/",
-        nginxAddConfigsFolder = "/etc/nginx/additional-configs/"
+        nginxAddConfigsFolder = "/etc/nginx/additional-configs/",
+        autheliaLogoutUrl = ""
         )
       try:
         if not os.path.exists(CONFIG_DIR):
@@ -50,3 +52,4 @@ def generate_default_config(application,CONFIG_DIR: str,DB_FILE: str):
       except Exception as msg:
         print(f"Generate-default-config error: {msg}")
         quit(1)
+
