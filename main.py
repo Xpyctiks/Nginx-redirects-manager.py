@@ -22,11 +22,10 @@ from db.db import db
 from db.database import User
 db.init_app(application)
 application.config['SESSION_SQLALCHEMY'] = db
-from functions.load_config import load_config, generate_default_config, migrate_schema
+from functions.load_config import load_config, generate_default_config
 generate_default_config(application,CONFIG_DIR,DB_FILE)
 with application.app_context():
   db.create_all()
-migrate_schema(application)
 load_config(application)
 application.secret_key = application.config["SECRET_KEY"]
 login_manager = LoginManager()
