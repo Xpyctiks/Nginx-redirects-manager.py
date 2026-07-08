@@ -104,7 +104,7 @@ def applyChanges() -> None:
 def is_admin() -> str:
   """Returns a navbar link to the admin panel if the current user has admin rights, otherwise an empty string"""
   if current_user.is_authenticated and current_user.rights == 255:
-    return '<li class="nav-item"><a class="nav-link active" href="/admin_panel">🎮Адмін-панель</a></li>'
+    return '<li class="nav-item"><a class="nav-link active" href="/admin_panel">🎮Адмінка</a></li>'
   return ""
 
 def rollBack() -> None:

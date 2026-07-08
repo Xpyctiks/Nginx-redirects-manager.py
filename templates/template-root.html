@@ -16,7 +16,7 @@
 <div>
   <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
     <div class="container-fluid">
-      <a class="navbar-brand" href="/">Redirects Manager v2.2</a>
+      <a class="navbar-brand" href="/">Nginx Redirects</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -40,7 +40,7 @@
           </li>
           <li class="nav-item" style="margin-left: 5px;">
             <form method="GET" action="/add">
-              <button class="btn btn-info" value="add" {{ addButtonDisabled|safe }}>Додати нові</button>
+              <button class="btn btn-info" value="add" {{ addButtonDisabled|safe }}>Додати</button>
               <input type="hidden" name="domain" value="{{ current_domain|safe }}">
               <input type="hidden" name="type" value="{{ redirect_type|safe }}">
             </form>
@@ -55,7 +55,7 @@
           {{ admin_panel|safe }}
         </ul>
         <form class="d-flex" action="/action" method="POST">
-          <span class="input-group-text" id="totalLines" style="color: #ffc107; background-color: #000000;">Поточний комміт в Git: {{ current_commit|safe }}</span>&nbsp;&nbsp;
+          <span class="input-group-text" id="totalLines" style="color: #ffc107; background-color: #000000;">Поточний комміт: {{ current_commit|safe }}</span>&nbsp;&nbsp;
           <button type="submit" class="btn btn-warning" name="rollback" value="rollback" id="rollbackButton" onClick="return confirm('Відкатити всі зміни назад? Всі зміни, що були зроблені але не застосовані, будут втрачені!')">Відкатити зміни</button>&nbsp;&nbsp;
           <button type="submit" class="{{ applyButton|safe }}" name="applyChanges" value="applyChanges" id="commitButton" onClick="return confirm('Зберігти та застосувати на сервері всі нові зміни?')" {{ applyButtonDisabled|safe }}>Застосувати зміни</button>&nbsp;&nbsp;
           <button class="btn btn-danger" type="submit" id="logoutButton" name="logout">{{ current_user.realname }}&nbsp;Вихід</button>
@@ -95,8 +95,8 @@
         {{table|safe}}
         <script>
           document.getElementById("spinnerLoading").style.visibility = "hidden";
-          document.getElementById("totalLines").textContent="Усього строк в файлі: {{ total_lines|safe }}";
-          document.getElementById("totalRecords").textContent="Усього редіректів: {{ total_redirects|safe }}";
+          document.getElementById("totalLines").textContent="Строк в файлі: {{ total_lines|safe }}";
+          document.getElementById("totalRecords").textContent="Редіректів: {{ total_redirects|safe }}";
         </script>
       </tbody>
     </table>
