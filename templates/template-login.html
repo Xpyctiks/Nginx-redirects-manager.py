@@ -26,7 +26,9 @@
       <span class="input-group-text">Пароль</span>
       <input type="password" class="form-control" id="password" name="password" autocomplete="on">
     </div>
-    <button style="margin-left: 170px;" type="submit" id="login" name="login" class="btn btn-primary" onclick="showLoading()">Вхід</button>
+    <div class="d-grid col-12 col-md-6 mx-auto">
+      <button type="submit" class="btn btn-primary" id="login" name="login" onclick="showLoading()">Вхід</button>
+    </div>
     </form>
     <div class="d-grid mt-2">
       <a href="/login/authelia" class="btn btn-outline-secondary" onclick="showLoading()">🔑Увійти через єдиний корп. аккаунт SSO</a>

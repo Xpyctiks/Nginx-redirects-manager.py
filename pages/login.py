@@ -37,7 +37,7 @@ def show_login():
     return redirect('/',301)
   return render_template("template-login.html")
 
-@login_bp.route("/login/authelia", methods=['GET'])
+@login_bp.route("/login/authelia/", methods=['GET'])
 def login_via_authelia():
   """GET request: entry point protected by reverse-proxy forward-auth (auth_request).
   Nginx must enforce Authelia authentication on this exact location (not the optional/pass-through
